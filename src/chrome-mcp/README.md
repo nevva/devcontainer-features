@@ -58,6 +58,17 @@ rebuilding the container runs it too, through `initializeCommand`.
 Then reconnect the agent, which still holds the dead connection: `/mcp` in Claude Code (pick `chrome-devtools`,
 reconnect) or `/restart` in Copilot CLI. The tunnel in the container keeps running and needs nothing.
 
+## Opening dev servers that run in the container
+
+The agent Chrome runs on the host, so a dev server inside the container (say on `localhost:3001`) is reachable
+from it only if the port is forwarded to the host. In `devcontainer.json`:
+
+- **VS Code:** `"forwardPorts": [3001]`.
+- **Devcontainer CLI, or no VS Code:** `"appPort": [3001]`. The dev server must listen on `0.0.0.0`, not
+  `localhost`, since Docker publishes the port on the container's network interface.
+
+The agent then opens `http://localhost:3001` in the agent Chrome.
+
 ## What it does
 
 - **Build:** installs `socat`, `iproute2` and `curl` (apt-get images), and the bridge as `/usr/local/bin/chrome-mcp`.
