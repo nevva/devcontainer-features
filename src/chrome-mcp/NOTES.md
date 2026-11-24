@@ -4,16 +4,6 @@ agent Chrome, so a login made once works everywhere.
 
 ## Use
 
-**On the host, once per session:** start the agent Chrome (port 9333, profile `~/.chrome-agent-shared`):
-
-```bash
-curl -fsSLo ~/.local/bin/start-agent-chrome https://raw.githubusercontent.com/nevva/devcontainer-features/main/host/start-agent-chrome.sh
-chmod +x ~/.local/bin/start-agent-chrome
-start-agent-chrome
-```
-
-First time only: log in to the sites the agent needs in that window.
-
 **In `devcontainer.json`:**
 
 ```jsonc
@@ -21,9 +11,15 @@ First time only: log in to the sites the agent needs in that window.
   "ghcr.io/devcontainers/features/node:1": {},          // skip if the image has Node
   "ghcr.io/nevva/devcontainer-features/chrome-mcp:1": {}
 },
-// Optional: start the agent Chrome on the host whenever the container opens.
-"initializeCommand": "start-agent-chrome || true"
+// On the host, whenever the container opens: download start-agent-chrome to ~/.local/bin the first time, then
+// start the agent Chrome (port 9333, profile ~/.chrome-agent-shared). No-op when it is already running.
+"initializeCommand": "f=\"$HOME/.local/bin/start-agent-chrome\"; [ -x \"$f\" ] || { mkdir -p \"${f%/*}\" && curl -fsSLo \"$f\" https://raw.githubusercontent.com/nevva/devcontainer-features/main/host/start-agent-chrome.sh && chmod +x \"$f\"; }; \"$f\" || true"
 ```
+
+macOS and Linux hosts only. To update the script, delete `~/.local/bin/start-agent-chrome`; the next container
+open downloads it again.
+
+First time only: log in to the sites the agent needs in the agent Chrome window.
 
 Rebuild, then restart Claude Code or run `/restart` in Copilot CLI.
 
