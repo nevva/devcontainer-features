@@ -23,6 +23,20 @@ First time only: log in to the sites the agent needs in the agent Chrome window.
 
 Rebuild, then restart Claude Code or run `/restart` in Copilot CLI.
 
+## Closed the agent Chrome?
+
+Start it again from a terminal **on the host** (not in the container, where the script refuses):
+
+```bash
+~/.local/bin/start-agent-chrome
+```
+
+It reuses the same profile, so logins are kept, and does nothing if Chrome is already running. Reopening or
+rebuilding the container runs it too, through `initializeCommand`.
+
+Then reconnect the agent, which still holds the dead connection: `/mcp` in Claude Code (pick `chrome-devtools`,
+reconnect) or `/restart` in Copilot CLI. The tunnel in the container keeps running and needs nothing.
+
 ## What it does
 
 - **Build:** installs `socat`, `iproute2` and `curl` (apt-get images), and the bridge as `/usr/local/bin/chrome-mcp`.
