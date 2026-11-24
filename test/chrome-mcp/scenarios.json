@@ -1,0 +1,12 @@
+{
+    "custom_ports_with_node": {
+        "image": "mcr.microsoft.com/devcontainers/javascript-node:22",
+        "features": {
+            "chrome-mcp": {
+                "hostAddr": "host.example.internal",
+                "hostPort": "9444",
+                "localPort": "9223"
+            }
+        }
+    }
+}

@@ -1,0 +1,29 @@
+{
+    "id": "chrome-mcp",
+    "version": "1.0.0",
+    "name": "Chrome MCP (host browser)",
+    "description": "Registers the chrome-devtools MCP server for Claude Code and Copilot CLI, driving an agent Chrome on the host through a socat tunnel.",
+    "documentationURL": "https://github.com/nevva/devcontainer-features/tree/main/src/chrome-mcp",
+    "options": {
+        "hostAddr": {
+            "type": "string",
+            "default": "",
+            "description": "Host name of the Docker host. Empty: host.rancher-desktop.internal when it resolves, else host.docker.internal."
+        },
+        "hostPort": {
+            "type": "string",
+            "default": "9333",
+            "description": "DevTools port of the agent Chrome on the host (start-agent-chrome.sh's CHROME_AGENT_PORT)."
+        },
+        "localPort": {
+            "type": "string",
+            "default": "9222",
+            "description": "Port the tunnel listens on inside the container. Keep it different from hostPort."
+        }
+    },
+    "installsAfter": [
+        "ghcr.io/devcontainers/features/common-utils",
+        "ghcr.io/devcontainers/features/node"
+    ],
+    "postStartCommand": "/usr/local/bin/chrome-mcp install"
+}
